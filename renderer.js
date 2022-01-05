@@ -5,7 +5,7 @@
 // selectively enable features needed in the rendering
 // process.
 
-document.querySelector('#start').addEventListener('click', async () => {
-    const a = await window.files.read();
+document.querySelector('#get').addEventListener('click', async () => {
+    const a = await window.files.get();
     console.log('Test', a);
 });

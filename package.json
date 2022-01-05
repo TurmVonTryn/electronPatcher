@@ -4,6 +4,7 @@
   "description": "An Ultima Online Patcher, powered by electron",
   "main": "main.js",
   "scripts": {
+    "go": "electron .",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"
@@ -20,7 +21,8 @@
     "electron": "^16.0.6"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "md5": "^2.3.0"
   },
   "config": {
     "forge": {

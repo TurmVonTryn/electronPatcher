@@ -11,9 +11,16 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 })
 
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('files', {
   read: () => ipcRenderer.invoke('files:read'),
   get: () => ipcRenderer.invoke('files:get')
-})
+});
+
+require('electron').ipcRenderer.on('updateNumberFiles', function(event, message) {
+  document.querySelector('#numberFiles').innerHTML = message.toString();
+});
+require('electron').ipcRenderer.on('updateFilesToGo', function(event, message) {
+  document.querySelector('#filesToGo').innerHTML = message.toString();
+});
