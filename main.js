@@ -72,9 +72,7 @@ function createWindow() {
       win.webContents.send('updateFilesToGo', --filesToGo);
       if (e) {
         console.log(e);
-        return;
       }
-      console.log(r);
     });
   };
 
