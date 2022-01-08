@@ -6,6 +6,5 @@
 // process.
 
 document.querySelector('#get').addEventListener('click', async () => {
-    const a = await window.files.get();
-    console.log('Test', a);
+  const a = await window.files.get();
 });
