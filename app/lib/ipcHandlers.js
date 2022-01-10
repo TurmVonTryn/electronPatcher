@@ -8,12 +8,23 @@ const url = 'https://schlenger.me/clientfiles/';
 
 module.exports = (win) => {
   let filesToGo = 0;
+  ipcMain.handle('state:selfUpdate', () => {
+    exec('taskkill /f /im schnecklauncher.exe');
+  });
+  win.webContents.send('debuggerConsole', process.cwd());
+
   ipcMain.handle('files:get', () => {
     console.log('files:get');
+    win.webContents.send('updateState', 'Prüfe Clientverzeichnis');
     if (!fs.existsSync('schnecke/')) {
       fs.mkdirSync('schnecke/');
     }
-    download(url + 'lastUpdate.txt', 'schnecke/tmp/lastUpdate.txt', lastUpdateDownloadCallback)
+    win.webContents.send('updateState', 'Prüfe auf Updates');
+    if (fs.existsSync('schnecke/lastUpdate.txt')) {
+      download(url + 'lastUpdate.txt', 'schnecke/tmp/lastUpdate.txt', lastUpdateDownloadCallback)
+    } else {
+      _startUpdate();
+    }
     return true;
   });
 
@@ -21,19 +32,25 @@ module.exports = (win) => {
     let lastServerUpdateTimestamp = parseInt(fs.readFileSync('schnecke/tmp/lastUpdate.txt').toString());
     let lastLocalUpdateTimestamp = parseInt(fs.readFileSync('schnecke/lastUpdate.txt').toString());
     if (lastLocalUpdateTimestamp < lastServerUpdateTimestamp) {
-      console.log('Update queued');
-      download(url + 'files.list', 'schnecke/tmp/files.list', fileListDownloadCallback);
+      _startUpdate();
     } else {
+      win.webContents.send('updateState', 'Client ist auf dem aktuellsten Stand');
       console.log('Last Update already installed');
       fs.rmSync('schnecke/tmp/', {recursive: true});
       //TODO: Checken ob Prozess gestartet wurde und dann electron schließen
       // exec('tasklist', (err, stdout, stderr) => {
       //   console.log(stdout.toString());
       // });
-      exec('start.bat', [], null, () => {
-        win.close();
-      });
+      // exec('start.bat', [], null, () => {
+      //   win.close();
+      // });
     }
+  }
+
+  let _startUpdate = () => {
+    console.log('Update queued');
+    win.webContents.send('updateState', 'Dateitabelle wird heruntergeladen');
+    download(url + 'files.list', 'schnecke/tmp/files.list', fileListDownloadCallback);
   }
 
   let fileListDownloadCallback = (err) => {
@@ -47,11 +64,14 @@ module.exports = (win) => {
     win.webContents.send('updateFilesToGo', filesToGo);
 
     fileList.forEach(line => {
-      checkForUpdates(_getFilePathFromLine(line), _getChecksumFromLine(line));
+      let filePath = _getFilePathFromLine(line);
+      win.webContents.send('updateState', `Prüfe ${filePath}`);
+      checkForUpdates(filePath, _getChecksumFromLine(line));
     });
     fs.rmSync('schnecke/tmp/', {recursive: true});
-    exec('start.bat');
-    win.close();
+
+    // exec('start.bat');
+    // win.close();
   }
 
   let checkForUpdates = (filePath, serverChecksum) => {
@@ -74,12 +94,14 @@ module.exports = (win) => {
   }
 
   let _downloadClientFile = (file) => {
+    win.webContents.send('updateState', `Lade ${file} herunter`);
     download(url + file, 'schnecke/' + file, (e) => {
       win.webContents.send('updateFilesToGo', --filesToGo);
       if (e) {
         console.log(e);
         return;
       }
+      win.webContents.send('updateState', `${file} heruntergeladen`);
       console.log('Downloaded file', file);
     });
   };

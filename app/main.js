@@ -1,6 +1,9 @@
 // Modules to control application life and create native browser window
+const fs = require('fs');
+
 const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
+const exec = require('child_process').execFile;
 const initHandlers = require('./lib/ipcHandlers.js');
 
 // app.disableHardwareAcceleration();
@@ -34,6 +37,18 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
+});
+
+app.on('will-quit', () => {
+  exec('start.bat');
+  console.log('quit');
+  // let asar = fs.readFileSync('resources/test.asar');
+  // fs.writeFileSync('resources/app.asar', asar)
+  // if (fs.existsSync('resources\\app.asar')) {
+  //   fs.writeFileSync('resources\\app.asar.bck', fs.readFileSync(process.cwd() + '\\resources\\app.asar'));
+  // } else {
+  //   fs.writeFileSync('debug.log', 'app.asar not found');
+  // }
 });
 
 app.on('window-all-closed', () => {
