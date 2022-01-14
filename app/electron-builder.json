@@ -1,0 +1,14 @@
+{
+  "appId": "schnecklauncher",
+  "publish": [{
+    "provider": "github",
+    "owner": "FantasySchnecke",
+    "repo": "electronPatcher"
+  }],
+  "win": {
+    "target": "nsis"
+  },
+  "nsis": {
+    "oneClick": false
+  }
+}

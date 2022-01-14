@@ -1,12 +1,15 @@
 // Modules to control application life and create native browser window
-const fs = require('fs');
+//const fs = require('fs');
 
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const exec = require('child_process').execFile;
 const initHandlers = require('./lib/ipcHandlers.js');
 
 // app.disableHardwareAcceleration();
+
+//const {autoUpdate} = require('electron-updater');
+//autoUpdate.checkForUpdatesAndNotify()();
 
 function createWindow() {
   // Create the browser window.

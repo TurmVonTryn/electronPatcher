@@ -6,44 +6,20 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-packager . schnecklauncher --platform=win32 --arch=ia32 --out=../out/ --icon=./assets/app.ico --asar --overwrite --win32metadata.CompanyName=\"Schortys Keller\"",
-    "release": "npm run build && node ../cleanup.js"
+    "release2": "npm run build && node ../cleanup.js",
+    "release": "electron-builder --win --ia32 -p always"
   },
   "author": "Schorty",
   "license": "",
   "devDependencies": {
     "asar": "^3.1.0",
     "electron": "^16.0.6",
+    "electron-builder": "^22.14.5",
     "electron-packager": "^15.4.0",
     "electron-squirrel-startup": "^1.0.0"
   },
   "dependencies": {
+    "electron-updater": "^4.6.1",
     "md5": "^2.3.0"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "Patcher"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
   }
 }
