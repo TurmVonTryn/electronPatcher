@@ -8,8 +8,8 @@ const url = 'https://schlenger.me/clientfiles/';
 
 module.exports = (win) => {
   let filesToGo = 0;
-  ipcMain.handle('state:selfUpdate', () => {
-    exec('taskkill /f /im schnecklauncher.exe');
+  ipcMain.handle('client:start', () => {
+    exec('start.bat');
   });
   win.webContents.send('debuggerConsole', process.cwd());
 

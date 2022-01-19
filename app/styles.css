@@ -3,8 +3,15 @@
 /* Add styles here to customize the appearance of your app */
 
 html {
-  background-color: #333;
+  background-color: #262626;
   color: #ccc;
+  font-family: "Roboto Light", Calibri, sans-serif;
   margin: 0;
   padding: 0;
+}
+
+#version {
+  bottom: 5px;
+  position: fixed;
+  right: 5px;
 }

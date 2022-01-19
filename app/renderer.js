@@ -4,11 +4,10 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
-
 document.querySelector('#get').addEventListener('click', async () => {
   await window.files.get();
 });
 
-document.querySelector('#selfUpdate').addEventListener('click', async () => {
-  await window.state.selfUpdate();
+document.querySelector('#start').addEventListener('click', async () => {
+  await window.client.start();
 });

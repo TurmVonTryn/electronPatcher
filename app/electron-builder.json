@@ -1,14 +1,20 @@
 {
-  "appId": "schnecklauncher",
+  "appId": "schorty.schnecklauncher",
   "publish": [{
-    "provider": "github",
-    "owner": "FantasySchnecke",
-    "repo": "electronPatcher"
+    "provider": "generic",
+    "url": "localhost:3000/launcherfiles"
   }],
   "win": {
-    "target": "nsis"
+    "target": "nsis",
+    "icon": "assets/app.ico",
+    "verifyUpdateCodeSignature": false
   },
   "nsis": {
-    "oneClick": false
-  }
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true
+  },
+  "files": [
+    "!**/dev-app-update-sample.yml",
+    "!**/dev-app-update.yml"
+  ]
 }

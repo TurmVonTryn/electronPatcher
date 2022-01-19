@@ -3,3 +3,5 @@ node_modules
 .vs/
 out/
 schnecke/
+app/dist/
+app/dev-app-update.yml
