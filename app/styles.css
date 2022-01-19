@@ -2,16 +2,30 @@
 
 /* Add styles here to customize the appearance of your app */
 
-html {
-  background-color: #262626;
-  color: #ccc;
-  font-family: "Roboto Light", Calibri, sans-serif;
+html, * {
   margin: 0;
   padding: 0;
 }
 
+body {
+  background-color: #262626;
+  color: #ccc;
+  font-family: "Roboto Light", Calibri, sans-serif;
+  font-size: 40px;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 2.5em;
+}
+
 #version {
   bottom: 5px;
+  font-size: 20px;
   position: fixed;
   right: 5px;
+}
+
+.hidden {
+  display: none;
 }

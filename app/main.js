@@ -1,7 +1,7 @@
 // Modules to control application life and create native browser window
 //const fs = require('fs');
 
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcRenderer} = require('electron');
 const path = require('path');
 const exec = require('child_process').execFile;
 const initHandlers = require('./lib/ipcHandlers.js');
@@ -27,6 +27,13 @@ function sendStatusToWindow(text) {
   }
   win.webContents.send('message', text);
 }
+
+function toggleLauncherClientView() {
+  if (process.env.DEBUG) {
+    autoUpdater.logger.info('toggleLauncherClientView()');
+  }
+  win.webContents.send('toggleLauncherClientView');
+}
 autoUpdater.on('checking-for-update', () => {
   sendStatusToWindow('Prüfe auf Launcher-Update');
 });
@@ -35,6 +42,8 @@ autoUpdater.on('update-available', (info) => {
 });
 autoUpdater.on('update-not-available', (info) => {
   sendStatusToWindow('Launcher ist auf dem aktuellen Stand.');
+  toggleLauncherClientView();
+  initHandlers.update();
 });
 autoUpdater.on('error', (err) => {
   sendStatusToWindow('Launcher-Update ist fehlgeschlagen. Fehlermeldung: ' + err);
@@ -47,7 +56,7 @@ autoUpdater.on('download-progress', (progressObj) => {
 });
 autoUpdater.on('update-downloaded', (ev, info) => {
   sendStatusToWindow('Done');
-  //autoUpdater.quitAndInstall(true, true);
+  autoUpdater.quitAndInstall(true, true);
 });
 
 app.on('ready', function()  {
@@ -58,14 +67,13 @@ app.on('ready', function()  {
       createWindow();
     }
   });
-  autoUpdater.checkForUpdates();
 });
 
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 800,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
@@ -76,7 +84,7 @@ function createWindow() {
   // and load the index.html of the app.
   //win.loadFile('index.html');
   win.loadURL(`file://${__dirname}/index.html#v${app.getVersion()}`);
-  initHandlers(win);
+  initHandlers.init(win, autoUpdater);
 
   if (process.env.DEBUG) {
     // Open the DevTools.
