@@ -18,13 +18,6 @@ let lastUpdateDownloadCallback = (err) => {
     win.webContents.send('updateState', 'Client ist auf dem aktuellsten Stand');
     console.log('Last Update already installed');
     fs.rmSync('schnecke/tmp/', {recursive: true});
-    //TODO: Checken ob Prozess gestartet wurde und dann electron schließen
-    // exec('tasklist', (err, stdout, stderr) => {
-    //   console.log(stdout.toString());
-    // });
-    // exec('start.bat', [], null, () => {
-    //   win.close();
-    // });
   }
 }
 
@@ -102,11 +95,13 @@ let update = () => {
     fs.mkdirSync('schnecke/');
   }
   win.webContents.send('updateState', 'Prüfe auf Updates');
-  if (fs.existsSync('schnecke/lastUpdate.txt')) {
-    download(url + 'lastUpdate.txt', 'schnecke/tmp/lastUpdate.txt', lastUpdateDownloadCallback)
-  } else {
-    _startUpdate();
-  }
+  fs.access('schnecke/lastUpdate.txt', (error) => {
+    if (error) {
+      _startUpdate();
+    } else {
+      download(url + 'lastUpdate.txt', 'schnecke/tmp/lastUpdate.txt', lastUpdateDownloadCallback);
+    }
+  });
   return true;
 };
 
