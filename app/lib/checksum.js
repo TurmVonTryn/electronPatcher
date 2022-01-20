@@ -9,6 +9,9 @@ function getFrontBackHash(fileStream) {
 }
 
 function partialHash(fileStream, isMulFile) {
+  if (!fileStream) {
+    return null;
+  }
   let buffer = '';
   if (fileStream.length > 1024 * 1024 * 5 && isMulFile) {
     for (let i = 0; i < fileStream.length; i += (fileStream.length / 20000)) {

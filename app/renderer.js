@@ -4,10 +4,6 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
-document.querySelector('#get').addEventListener('click', async () => {
-  await window.files.get();
-});
 
-document.querySelector('#start').addEventListener('click', async () => {
-  await window.client.start();
-});
+document.querySelector('#reinstall').addEventListener('click', async () => await window.client.reinstall());
+document.querySelector('#start').addEventListener('click', async () => await window.client.start());

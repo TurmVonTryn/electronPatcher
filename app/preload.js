@@ -3,13 +3,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 window.addEventListener('DOMContentLoaded', () => {
-  let version = window.location.hash.substring(1);
-  document.getElementById('version').innerText = version;
+  document.getElementById('version').innerText = window.location.hash.substring(1);
   ipcRenderer.invoke('launcher:update');
-});
-
-contextBridge.exposeInMainWorld('files', {
-  get: () => ipcRenderer.invoke('files:get')
 });
 
 contextBridge.exposeInMainWorld('state', {
@@ -17,6 +12,8 @@ contextBridge.exposeInMainWorld('state', {
 });
 
 contextBridge.exposeInMainWorld('client', {
+  get: () => ipcRenderer.invoke('client:get'),
+  reinstall: () => ipcRenderer.invoke('client:reinstall'),
   start: () => ipcRenderer.invoke('client:start')
 });
 
@@ -27,13 +24,20 @@ ipcRenderer.on('message', function(event, text) {
   container.appendChild(message);
 });
 
-ipcRenderer.on('toggleLauncherClientView', function(event, text) {
+ipcRenderer.on('toggleLauncherClientView', function() {
   document.getElementById('launcherUpdate').classList.toggle('hidden');
   document.getElementById('clientUpdate').classList.toggle('hidden');
 });
 
+
 ipcRenderer.on('updateState', function(event, message) {
-  document.querySelector('#state').innerHTML = message.toString();
+  const stateContainer = document.getElementById('state');
+  stateContainer.innerHTML = message.toString() + '<br>' + stateContainer.innerHTML;
+});
+
+ipcRenderer.on('clearState', function(event, message) {
+  const stateContainer = document.getElementById('state');
+  stateContainer.innerHTML = '';
 });
 
 ipcRenderer.on('debuggerConsole', function(event, message) {
