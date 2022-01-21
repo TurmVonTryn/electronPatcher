@@ -1,12 +1,11 @@
 {
   "name": "schnecklauncher",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An Ultima Online Patcher, powered by electron",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-packager . schnecklauncher --platform=win32 --arch=ia32 --out=../out/ --icon=./assets/app.ico --asar --overwrite --win32metadata.CompanyName=\"Schortys Keller\"",
-    "release2": "npm run build && node ../cleanup.js",
     "release": "electron-builder --win --ia32 -p never"
   },
   "author": "Schorty",
