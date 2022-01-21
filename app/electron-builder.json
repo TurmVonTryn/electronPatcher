@@ -2,7 +2,7 @@
   "appId": "schorty.schnecklauncher",
   "publish": [{
     "provider": "generic",
-    "url": "localhost:3000/launcherfiles"
+    "url": "https://schlenger.me/launcherfiles"
   }],
   "win": {
     "target": "nsis",

@@ -10,10 +10,14 @@ const {autoUpdater} = require("electron-updater");
 autoUpdater.autoDownload = true;
 autoUpdater.setFeedURL({
   provider: "generic",
-  url: "http://localhost:3000/launcherfiles/"
+  url: "https://schlenger.me/launcherfiles/"
 });
 
 if (process.env.DEBUG) {
+  autoUpdater.setFeedURL({
+    provider: "generic",
+    url: "http://localhost:3000/launcherfiles/"
+  });
   autoUpdater.logger = require("electron-log");
   autoUpdater.logger.transports.file.level = "info";
 }
