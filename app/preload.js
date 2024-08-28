@@ -1,6 +1,7 @@
 // All of the Node.js APIs are available in the preload process.
 
 const { contextBridge, ipcRenderer } = require('electron');
+let maxFiles = 0;
 
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('version').innerText = window.location.hash.substring(1);
@@ -29,7 +30,6 @@ ipcRenderer.on('toggleLauncherClientView', function() {
   document.getElementById('clientUpdate').classList.toggle('hidden');
 });
 
-
 ipcRenderer.on('updateState', function(event, message) {
   const stateContainer = document.getElementById('state');
   stateContainer.innerHTML = message.toString() + '<br>' + stateContainer.innerHTML;
@@ -45,9 +45,10 @@ ipcRenderer.on('debuggerConsole', function(event, message) {
 });
 
 ipcRenderer.on('updateNumberFiles', function(event, message) {
-  document.querySelector('#numberFiles').innerHTML = message.toString();
+  maxFiles = message.toString()
+  document.querySelector('#numberFiles').innerHTML = maxFiles;
 });
 
 ipcRenderer.on('updateFilesToGo', function(event, message) {
-  document.querySelector('#filesToGo').innerHTML = message.toString();
+  document.querySelector('#filesToGo').innerHTML = (parseInt(maxFiles) - parseInt(message.toString())).toString();
 });

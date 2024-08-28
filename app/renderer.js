@@ -5,5 +5,18 @@
 // selectively enable features needed in the rendering
 // process.
 
-document.querySelector('#reinstall').addEventListener('click', async () => await window.client.reinstall());
-document.querySelector('#start').addEventListener('click', async () => await window.client.start());
+
+document.addEventListener('click', async (event) => {
+  switch (event.target.id) {
+    case 'reinstall':
+      await window.client.reinstall();
+      break;
+    case 'start':
+      await window.client.start();
+      break;
+  }
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await window.client.get();
+});

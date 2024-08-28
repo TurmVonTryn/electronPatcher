@@ -2,6 +2,6 @@ node_modules
 .idea/
 .vs/
 out/
-schnecke/
+tvt/
 app/dist/
 app/dev-app-update.yml
