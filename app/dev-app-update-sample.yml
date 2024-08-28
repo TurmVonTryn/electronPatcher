@@ -1,3 +1,4 @@
 provider: generic
 url: localhost:3000/launcherfiles
-updaterCacheDirName: schnecklauncher-updater
+channel: lastest
+updaterCacheDirName: launcher-updater-cache

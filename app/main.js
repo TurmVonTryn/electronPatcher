@@ -1,24 +1,24 @@
 // Modules to control application life and create native browser window
 //const fs = require('fs');
 
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, dialog} = require('electron');
 const path = require('path');
 const initHandlers = require('./lib/ipcHandlers.js');
 const downloadSpeedDecorator = require('./lib/downloadSpeedDecorator.js');
-let win;
+let mainWindow;
 
-const {autoUpdater} = require("electron-updater");
-autoUpdater.autoDownload = true;
-autoUpdater.setFeedURL({
-  provider: "generic",
-  url: "http://localhost:3000/launcherfiles/"
-});
+const { autoUpdater} = require("electron-updater");
+// autoUpdater.autoDownload = true;
+// autoUpdater.setFeedURL({
+//   provider: "generic",
+//   url: "http://localhost:3000/launcherfiles/"
+// });
 
 if (process.env.DEBUG) {
-  autoUpdater.setFeedURL({
-    provider: "generic",
-    url: "http://localhost:3000/launcherfiles/"
-  });
+  // autoUpdater.setFeedURL({
+  //   provider: "generic",
+  //   url: "http://localhost:3000/launcherfiles/"
+  // });
   autoUpdater.logger = require("electron-log");
   autoUpdater.logger.transports.file.level = "info";
 }
@@ -27,14 +27,14 @@ function sendStatusToWindow(text) {
   if (process.env.DEBUG) {
     autoUpdater.logger.info(text);
   }
-  win.webContents.send('message', text);
+  mainWindow.webContents.send('message', text);
 }
 
 function toggleLauncherClientView() {
   if (process.env.DEBUG) {
     autoUpdater.logger.info('toggleLauncherClientView()');
   }
-  win.webContents.send('toggleLauncherClientView');
+  mainWindow.webContents.send('toggleLauncherClientView');
 }
 
 autoUpdater.on('checking-for-update', () => {
@@ -84,7 +84,7 @@ app.on('window-all-closed', () => {
 });
 
 function createWindow() {
-  win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     icon: path.join(__dirname, 'assets', 'app.ico'),
@@ -93,13 +93,18 @@ function createWindow() {
     },
     resizable: false
   });
-  win.removeMenu();
+  mainWindow.removeMenu();
 
-  const promise = win.loadURL(`file://${__dirname}/index.html#v${app.getVersion()}`)
+  const promise = mainWindow.loadURL(`file://${__dirname}/index.html#v${app.getVersion()}`)
 
-  initHandlers.init(win, autoUpdater);
+  initHandlers.init(mainWindow, autoUpdater);
 
   if (process.env.DEBUG) {
-    win.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
   }
+
+  // Check for updates after the window is created
+  mainWindow.once('ready-to-show', () => {
+    autoUpdater.checkForUpdatesAndNotify();
+  });
 }

@@ -1,16 +1,24 @@
 {
   "name": "tvtlauncher",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "An Ultima Online Patcher, powered by electron",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-packager . TvT --prune=true --platform=win32 --arch=ia32 --out=../out/ --icon=./assets/app.ico --asar --overwrite --win32metadata.CompanyName=\"Schortys Keller\" --ignore=\"(dist|tvt|locales/(?!en-US\\.pak$|de\\.pak$|fr\\.pak$).*)\"",
-    "release": "electron-builder --win --ia32"
+    "release": "electron-builder --win --ia32 --publish=always"
   },
   "author": "Schorty",
   "license": "",
   "build": {
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "TurmVonTryn",
+        "repo": "electronPatcher",
+        "releaseType": "release"
+      }
+    ],
     "appId": "com.schorty.tvtlauncher",
     "productName": "Turm von Tryn Launcher",
     "directories": {
@@ -41,7 +49,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "build/icon.ico"
+      "icon": "build/assets/app.ico"
     }
   },
   "devDependencies": {
